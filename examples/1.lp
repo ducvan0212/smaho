@@ -45,5 +45,6 @@ init(object(device,2),uncertainty(at,(10,5))).
 
 % device D has to turn on at least x time, at most y times from timeslot t to t'
 % init(object(device,D),constraint(on,(x,y),(t,t')))).
-init(object(device,1),constraint(on,(3,3),(1,5))).
+init(object(device,1),constraint(on,(1,1),(1,2))).
+init(object(device,1),constraint(on,(1,1),(4,5))).
 init(object(device,2),constraint(on,(2,2),(1,5))).
