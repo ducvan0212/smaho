@@ -6,7 +6,7 @@
 python generator.py -d <device> -t <timeslot>
 ```
 
-Instances will be generated in *examples/* dir and will be named as format <device>_<timeslot>.lp
+Instances will be generated in *examples/* dir and will be named as format `<device>_<timeslot>.lp`
 
 ## Scheduler
 
