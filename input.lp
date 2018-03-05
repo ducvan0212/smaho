@@ -13,3 +13,6 @@ uncertainty(device(D),V,T)   :- init(object(device,D), uncertainty(at,(V,T))).
 
 % device D has constraint on Bound in Interval
 bound(device(D),B,I) :- init( object(device,D),constraint(on,B,I) ).
+
+% partial order on device D and D'
+order(device(D),device(D'),I):- init(object(device,D),constraint(before,(device,D'),I)).

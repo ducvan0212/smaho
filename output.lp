@@ -8,5 +8,6 @@ span(D,(T,T)) :- on(D,T), not on(D,T-1), not on(D,T+1).
 %#show weight/2.
 %#show weight/3.
 %#show bound/3.
+%#show order/3.
 #show span/2.
 
