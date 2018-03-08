@@ -26,12 +26,12 @@ def main(argv):
     elif opt in ("-o", "--ofile"):
       timeslot = int(arg) + 1
       
-  with open("examples/" + str(device-1) + "_" + str(timeslot-1) + ".lp","w") as the_file:
+  with open("examples/" + str(device-1) + "_" + str(timeslot-1) + ".lp","w") as f:
     for d in range(1,device):
       for t in range(1,timeslot):
         for k in KEYWORDS:
           value = random.randint(1,10)
-          the_file.write("init(object(device," + str(d) + ")," + k + "(at,(" + str(value) + "," + str(t) + "))).\n")
+          f.write("init(object(device," + str(d) + ")," + k + "(at,(" + str(value) + "," + str(t) + "))).\n")
   
 if __name__ == "__main__":
    main(sys.argv[1:])    

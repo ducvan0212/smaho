@@ -6,7 +6,7 @@
 python generator.py -d <device> -t <timeslot>
 ```
 
-Instances will be generated in *examples/* dir and will be named as format `<device>_<timeslot>.lp`.
+Instances will be generated in *examples/* dir and will be named in format `<device>_<timeslot>.lp`.
 
 TODO: generate constraints.
 
@@ -21,5 +21,5 @@ clingo <instance> schedule.lp <weight_function> | clingo - <output>
 E.g:
 
 ```
-./clingo1facts examples/1.lp schedule.lp wf/cu.lp | clingo - output.lp
+./clingo1facts examples/1.lp schedule.lp wf/cu.lp | ./clingo1facts - output.lp
 ```
