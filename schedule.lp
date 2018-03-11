@@ -14,3 +14,7 @@ total_weight(D,S) :- S = #sum {W,w(C,U,P),T: weight(D,w(C,U,P),T), wf(C,U,P,W)},
    T >= T'.
    
 #minimize { S@1,D: total_weight(D,S) }.
+
+#program lower_uncertainty(n).
+#external uncertainty_bound(n).
+:- S = #sum {U,D,T: weight(D,w(C,U,P),T)}, S >= n, uncertainty_bound(n).
