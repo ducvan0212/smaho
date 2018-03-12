@@ -6,7 +6,7 @@
 python generator.py -d <device> -t <timeslot> -a <affix>
 ```
 
-Instances will be generated in *examples/`<device>_<timeslot>_<affix>`/* dir. `instance.lp` will contains `cost`, `pref`, `uncertainty` matrixes and `constraints`. For now, there is just one  generated `constraint` for each device. Manually add more as you want.
+Instances will be generated in *examples/`<device>_<timeslot>_<affix>`/* dir. `instance.lp` will contain `cost`, `pref`, `uncertainty` matrixes and `constraints`. For now, there is just one  generated `constraint` for each device. Manually add more as you want.
 
 ## Scheduler
 
