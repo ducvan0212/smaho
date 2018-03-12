@@ -2,16 +2,21 @@
 import clingo
 from IPython import embed
 
-UNCERTAIN = []
+DEBUG     = False
+UNCERTAIN = [99999]
 
 def main(prg):
+  def debug(msg):
+    if DEBUG: print msg 
+    
   def on_model(m):
     del UNCERTAIN[:]
     for i in m.symbols(True):
       if i.name == "weight":
         UNCERTAIN.append(i.arguments[1].arguments[1].number) 
     
-    print "\nUncertainty {}: {}".format(UNCERTAIN, sum(UNCERTAIN))
+    debug("Uncertainty array {}".format(UNCERTAIN))
+    print "Found a solution that has uncertainty = {}".format(sum(UNCERTAIN))
   
   prg.load("examples/1.lp")
   prg.load("schedule.lp")
@@ -19,30 +24,25 @@ def main(prg):
   prg.load("output.lp")
   prg.ground([("base", [])])
   
-  ret = prg.solve(on_model=on_model)
-  if ret.unsatisfiable or ret.unknown:
-    return
-  else:
-    b = sum(UNCERTAIN)  
-    print "Find a solution with uncertainty: {}".format(b)
-    
   while True:
+    b = sum(UNCERTAIN)
+    print("\n")
+    debug("Uncertainty bound = {}".format(b))
     parts = []
     parts.append(("lower_uncertainty", [b]))
     prg.ground(parts)
-    print "Find another solution that has uncertainty < {}".format(b)
     prg.assign_external(clingo.Function("uncertainty_bound", [b]), True)
     ret = prg.solve(on_model=on_model)
-
+    
     if ret.unsatisfiable or ret.unknown:
       return
-    else:
-      print "=============\nLower uncertainty? (y/n): ",
-      decision = raw_input()
-      if decision == "n":
-        return
-      prg.release_external(clingo.Function("uncertainty_bound", [b]))
-      prg.cleanup()
-      b = sum(UNCERTAIN)  
-      
+    
+    print "Wanna lower uncertainty? (y/n): "
+    decision = raw_input()
+    if decision == "n":
+      return
+    debug("Release {}".format(b))
+    prg.release_external(clingo.Function("uncertainty_bound", [b]))
+    prg.cleanup()
+    
 #end.

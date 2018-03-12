@@ -24,6 +24,12 @@ E.g:
 ./clingo1facts examples/1.lp schedule.lp wf/cu.lp | ./clingo1facts - output.lp
 ```
 
+## Run with python controller to lower uncertainty
+
+```
+clingo controller.lp
+```
+
 #### Configuration
 
 ```
