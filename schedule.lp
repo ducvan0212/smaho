@@ -3,7 +3,7 @@
 
 L { on(D,T): timeslot(T), S<=T, T<=F } U :- isDevice(D), bound(D,(L,U),(S,F)).
 
-weight(D,w(C,U,P),T) :- on(D,T), cost(D,C,T), uncertainty(D,U,T), pref(D,P,T).
+weight(D,w(C,U,P),T) :- on(D,T), cost(D,T,C), uncertainty(D,T,U), pref(D,T,P).
 
 :- order(D,D',(S,F)), isDevice(D), isDevice(D'),
    on(D ,T ), S <= T , T  <= F,
@@ -11,6 +11,8 @@ weight(D,w(C,U,P),T) :- on(D,T), cost(D,C,T), uncertainty(D,U,T), pref(D,P,T).
    T >= T'.
    
 #minimize { W@1,D,T: weight(D,w(C,U,P),T), wf(C,U,P,W) }.
+
+#show bound/3.
 
 #program lower_uncertainty(n).
 #external uncertainty_bound(n).
