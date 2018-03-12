@@ -7,7 +7,6 @@ atoms(C) :- C = #count {D,I: span(D,I)}.
 
 %#show on/2.
 %#show cost/3.
-#show total_weight/2.
 #show weight/3.
 %#show bound/3.
 %#show order/3.
