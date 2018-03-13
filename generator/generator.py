@@ -7,6 +7,7 @@ from IPython import embed
 import subprocess
 import random
 import os
+import shutil
 
 KEYWORDS = ["pref", "uncertainty"]
 
@@ -15,22 +16,22 @@ def main(argv):
   timeslot  = 25
   affix     = "1"
   cost_file = "generator/price_energy_20_24.lp"
+  group     = 0
   
   try:
-    opts, args = getopt.getopt(argv,"hd:t:a:f:",["device=","timeslot=","affix=","file="])
+    opts, args = getopt.getopt(argv,"hd:t:a:f:g:",["device=","timeslot=","affix=","file=","group="])
   except getopt.GetoptError:
-    print 'generator.py -d <device> -t <timeslot> -a <affix> -c <file>'
-    print 'affix is optional. Default 1. Purpose: discriminate generated folder'
-    print 'file is cost encode. Template is at generator/price_energy_20_24.lp. Cost encode MUST have the same number of devices and timeslots as provided for the generator'
+    print 'generator.py -d <device> -t <timeslot> -a <affix> -c <file> -g <group>'
     sys.exit(2)
   for opt, arg in opts:
     if opt == '-h':
-      print '\n  generator.py -d <device> -t <timeslot> -a <affix> -c <file>\n'
+      print '\n  generator.py -d <device> -t <timeslot> -a <affix> -c <file> -g <group>\n'
       print 'Parameters:'
-      print '  device. Default 20.'
-      print '  timeslot. Default 25.'
-      print '  affix. Default 1. Purpose: discriminate generated folder'
-      print '  file: cost encode file. Template can be found at generator/price_energy_20_24.lp. Cost encode MUST have the same number of devices and timeslots as provided for the generator'
+      print '  device    Default 20.'
+      print '  timeslot  Default 25.'
+      print '  affix     Default 1. Purpose: discriminate generated folder'
+      print '  file      Cost encode file. Template can be found at generator/price_energy_20_24.lp. Cost encode MUST have the same number of devices and timeslots as provided for the generator'
+      print '  group:    Number of constraints grouped into subprograms for solving separately'
       sys.exit()
     elif opt in ("-d", "--divice"):
       device = int(arg) + 1
@@ -40,7 +41,9 @@ def main(argv):
       affix = arg
     elif opt in ("-f", "--file"):
       cost_file = arg
-    
+    elif opt in ("-g", "--group"):
+      group = int(arg)
+      
   # create directory
   directory = "examples/" + str(device-1) + "_" + str(timeslot-1) + "_" + affix
   if not os.path.exists(directory):
@@ -70,7 +73,25 @@ def main(argv):
     for k in KEYWORDS:
       f.write("#include \"" + k + ".lp\".\n")
     f.write("#include \"cost.lp\".\n\n")
-    for d in range(1,device):
+  
+  # create directory for constraint groups
+  directory = directory + "/constraints"
+  if os.path.exists(directory):
+    shutil.rmtree(directory)
+  os.makedirs(directory)
+  
+  # generate constraint groups
+  if group == 0:
+    fname = directory + "/g.lp"
+    with open(fname,"w") as f:
+      f.write("#program g1.\n")
+      f.write("#external g1_flag.\n")
+
+  for d in range(1,device):
+    group_count = (d-1)/group + 1
+    gname = "g" + str(group_count)
+    fname = directory + "/" + gname + ".lp"
+    with open(fname,"a") as f:
       i1       = random.randint(1,timeslot-2)
       i2       = random.randint(i1+1,timeslot-1)
       interval = "(" + str(i1) + "," + str(i2) + ")"
@@ -80,6 +101,7 @@ def main(argv):
       bound    = "(" + str(v1) + "," + str(v2) + ")"
       
       f.write("init(object(device," + str(d) + "),constraint(on," + bound + "," + interval + ")).\n")
+        
       
 if __name__ == "__main__":
    main(sys.argv[1:])    
