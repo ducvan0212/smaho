@@ -71,8 +71,8 @@ def main(argv):
       f.write("#include \"" + k + ".lp\".\n")
     f.write("#include \"cost.lp\".\n\n")
     for d in range(1,device):
-      i1       = random.randint(1,timeslot-1)
-      i2       = random.randint(i1+1,timeslot)
+      i1       = random.randint(1,timeslot-2)
+      i2       = random.randint(i1+1,timeslot-1)
       interval = "(" + str(i1) + "," + str(i2) + ")"
       len_inte = i2-i1
       v1       = random.randint(1,len_inte)
