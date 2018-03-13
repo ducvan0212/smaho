@@ -11,19 +11,26 @@ import os
 KEYWORDS = ["pref", "uncertainty"]
 
 def main(argv):
-  device    = 10
+  device    = 21
   timeslot  = 25
   affix     = "1"
+  cost_file = "generator/price_energy_20_24.lp"
   
   try:
-    opts, args = getopt.getopt(argv,"hd:t:",["device=","timeslot="])
+    opts, args = getopt.getopt(argv,"hd:t:a:f:",["device=","timeslot=","affix=","file="])
   except getopt.GetoptError:
-    print 'generator.py -d <device> -t <timeslot> -a <affix>'
+    print 'generator.py -d <device> -t <timeslot> -a <affix> -c <file>'
     print 'affix is optional. Default 1. Purpose: discriminate generated folder'
+    print 'file is cost encode. Template is at generator/price_energy_20_24.lp. Cost encode MUST have the same number of devices and timeslots as provided for the generator'
     sys.exit(2)
   for opt, arg in opts:
     if opt == '-h':
-      print 'generator.py -d <device> -t <timeslot> -a <affix>'
+      print '\n  generator.py -d <device> -t <timeslot> -a <affix> -c <file>\n'
+      print 'Parameters:'
+      print '  device. Default 20.'
+      print '  timeslot. Default 25.'
+      print '  affix. Default 1. Purpose: discriminate generated folder'
+      print '  file: cost encode file. Template can be found at generator/price_energy_20_24.lp. Cost encode MUST have the same number of devices and timeslots as provided for the generator'
       sys.exit()
     elif opt in ("-d", "--divice"):
       device = int(arg) + 1
@@ -31,7 +38,9 @@ def main(argv):
       timeslot = int(arg) + 1
     elif opt in ("-a", "--affix"):
       affix = arg
-  
+    elif opt in ("-f", "--file"):
+      cost_file = arg
+    
   # create directory
   directory = "examples/" + str(device-1) + "_" + str(timeslot-1) + "_" + affix
   if not os.path.exists(directory):
@@ -49,7 +58,7 @@ def main(argv):
   # calculate cost from seed file (which is price_energy_20_24)
   source = os.path.dirname(__file__)
   parent = os.path.join(source, '../')
-  p = subprocess.Popen('./clingo1facts generator/price_energy_20_24.lp generator/cost.lp', cwd=parent, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  p = subprocess.Popen('./clingo1facts ' + cost_file + ' generator/cost.lp', cwd=parent, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   fname =  str(directory) + "/cost.lp"
   with open(fname,"w") as f:
     for line in iter(p.stdout.readline, ''):

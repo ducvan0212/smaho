@@ -2,11 +2,27 @@
 
 ## Instance generator
 
+Default generation: generate an instance that has 20 devices, 24 timeslots with cost encoded in `generator/price_energy_20_24.lp`: 
+
 ```
-python generator.py -d <device> -t <timeslot> -a <affix>
+python generator.py
 ```
 
-Instances will be generated in *examples/`<device>_<timeslot>_<affix>`/* dir. `instance.lp` will contain `cost`, `pref`, `uncertainty` matrixes and `constraints`. For now, there is just one  generated `constraint` for each device. Manually add more as you want.
+Advance generation:
+
+```
+python generator.py -d <device> -t <timeslot> -a <affix> -f <cost_file>
+```
+
+For specification
+```
+python generator.py -h
+```
+
+Instances will be generated in *examples/`<device>_<timeslot>_<affix>`/* dir. `instance.lp` will contain `cost`, `pref`, `uncertainty` matrixes and `constraints`. 
+  
+- Note 1: For now, there is just one  generated `constraint` for each device. Manually add more as you want.
+- Note 2: Cost encode file *MUST* have the same number of devices and timeslots as provided for the generator
 
 ## Scheduler
 
