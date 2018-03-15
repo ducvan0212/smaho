@@ -82,15 +82,18 @@ def main(argv):
   
   # generate constraint groups
   if group == 0:
-    fname = directory + "/g.lp"
-    with open(fname,"w") as f:
-      f.write("#program g1.\n")
-      f.write("#external g1_flag.\n")
-
+    # if group is not set
+    group = device
+    
   for d in range(1,device):
-    group_count = (d-1)/group + 1
-    gname = "g" + str(group_count)
+    group_count = (d-1)/group
+    gname = ""
+    for i in range(group_count*group+1, (group_count+1)*group+1):
+      if i <= device-1:
+        gname += str(i) + "_"
+    
     fname = directory + "/" + gname + ".lp"
+
     with open(fname,"a") as f:
       i1       = random.randint(1,timeslot-2)
       i2       = random.randint(i1+1,timeslot-1)

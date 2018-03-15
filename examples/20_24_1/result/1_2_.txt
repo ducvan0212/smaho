@@ -1,0 +1,1 @@
+span(device(2),(9,12)). span(device(1),(15,15)). span(device(2),(14,14)). weight(device(1),w(7590,3,10),15). weight(device(2),w(6480,7,8),9). weight(device(2),w(6900,10,6),10). weight(device(2),w(6900,4,6),11). weight(device(2),w(6900,4,8),12). weight(device(2),w(7590,4,8),14).
