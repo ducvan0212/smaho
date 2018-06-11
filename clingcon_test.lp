@@ -19,3 +19,6 @@ weight(D,w(C,U,P),T) :- on(D,T), cost(D,T,C), uncertainty(D,T,U), pref(D,T,P).
 &minimize {weight}.
 
 
+%&show { on/2; bound/3 }.
+#show on/2.
+#show bound/3.
